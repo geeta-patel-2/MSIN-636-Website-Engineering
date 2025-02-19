@@ -1,37 +1,37 @@
-// Function to simulate fetching weather data for a given city.
-// It returns a Promise that resolves with a weather message after a delay.
+// Define the function fetchWeather that returns a Promise with the weather info of a given city
 function fetchWeather(city) {
-    // Returning a new Promise to handle asynchronous behavior
-    return new Promise((resolve, reject) => {
-        // Using setTimeout to simulate a delay of 2 seconds (2000 milliseconds)
+    // Return a new Promise that resolves after a 2-second delay
+    return new Promise((resolve) => {
+        // setTimeout is used to simulate a 2-second delay (as if we were fetching weather data)
         setTimeout(() => {
-            // After 2 seconds, resolve the promise with a string showing the weather information
+            // After 2 seconds, resolve the promise with a weather message for the city
             resolve(`Weather in ${city} is 75°F`);
-        }, 2000);
+        }, 2000); // The delay is set to 2000 milliseconds (2 seconds)
     });
 }
 
-// Calling the fetchWeather function for 3 different cities in sequence using .then()
-// Each .then() handler receives the weather data from the previous promise and calls the next one.
+// Start the promise chain for New York
+fetchWeather("New York")
+    .then(result => {
+        // Log the weather for New York after 2 seconds
+        console.log(result);
 
-fetchWeather("New York") // Fetching weather data for New York
-    .then((weather) => {
-        // After the promise resolves for New York, log the weather information to the console
-        console.log(weather); // Output: Weather in New York is 75°F
-
-        // Return the next promise for Los Angeles weather to chain the next .then()
+        // After logging the weather for New York, call fetchWeather for Los Angeles
         return fetchWeather("Los Angeles");
     })
-    .then((weather) => {
-        // After the promise resolves for Los Angeles, log the weather information to the console
-        console.log(weather); // Output: Weather in Los Angeles is 75°F
+    .then(result => {
+        // Log the weather for Los Angeles after 2 seconds
+        console.log(result);
 
-        // Return the next promise for Chicago weather to chain the next .then()
+        // After logging the weather for Los Angeles, call fetchWeather for Chicago
         return fetchWeather("Chicago");
     })
-    .then((weather) => {
-        // After the promise resolves for Chicago, log the weather information to the console
-        console.log(weather); // Output: Weather in Chicago is 75°F
+    .then(result => {
+        // Log the weather for Chicago after 2 seconds
+        console.log(result);
+
+        // Finally, after all cities' weather info is fetched, log a completion message
+        console.log("Weather updates completed!");
     })
     .catch((error) => {
         // If there’s any error during any of the promise chains, handle it here
