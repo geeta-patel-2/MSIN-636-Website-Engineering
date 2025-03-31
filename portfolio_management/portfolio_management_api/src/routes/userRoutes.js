@@ -64,4 +64,24 @@ router.get('/users/search', async (req, res) => {
     }
 });
 
+// DELETE route to delete a user by user_id
+router.delete('/users/:user_id', async (req, res) => {
+    try {
+        const { user_id } = req.params;
+
+        // Attempt to delete the user by user_id
+        const user = await User.findOneAndDelete({ user_id }, null);
+
+        // Checking if found the delete user or not.
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Return a success message
+        res.status(200).json({ message: `User with ID ${user_id} has been deleted successfully.` });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
 export default router;
