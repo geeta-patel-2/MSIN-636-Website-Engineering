@@ -2,10 +2,10 @@
 import express from 'express';
 import User from '../models/User.js';
 
-const router = express.Router();
+const userRouter = express.Router();
 
 // POST route to create a new user
-router.post('/users', async (req, res) => {
+userRouter.post('/users', async (req, res) => {
     try {
         const { user_id, first_name, last_name, email_id, joining_date } = req.body;
 
@@ -26,7 +26,7 @@ router.post('/users', async (req, res) => {
 
 
 // GET route to search users by a given string in first_name, last_name, or email_id
-router.get('/users/search', async (req, res) => {
+userRouter.get('/users/search', async (req, res) => {
     try {
         // Extract the search string from query parameters
         const { search_string } = req.query;
@@ -65,7 +65,7 @@ router.get('/users/search', async (req, res) => {
 });
 
 // DELETE route to delete a user by user_id
-router.delete('/users/:user_id', async (req, res) => {
+userRouter.delete('/users/:user_id', async (req, res) => {
     try {
         const { user_id } = req.params;
 
@@ -84,4 +84,4 @@ router.delete('/users/:user_id', async (req, res) => {
     }
 });
 
-export default router;
+export default userRouter;
