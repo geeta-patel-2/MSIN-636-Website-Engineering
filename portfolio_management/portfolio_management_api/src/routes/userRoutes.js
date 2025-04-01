@@ -28,8 +28,8 @@ userRouter.post('/users', async (req, res) => {
 // GET route to search users by a given string in first_name, last_name, or email_id
 userRouter.get('/users/search', async (req, res) => {
     try {
-        // Extract the search string from query parameters
-        const { search_string } = req.query;
+        // Extract the search string and pagination parameters from query parameters
+        const { search_string, is_paginated = false, page = 1, rows_per_page = 10 } = req.query;
 
         // Checking if search String is not null
         if (!search_string) {
@@ -50,19 +50,40 @@ userRouter.get('/users/search', async (req, res) => {
             ]
         };
 
-        // Perform the search in the MongoDB database using the constructed query
-        const users = await User.find(searchQuery);
+        // If pagination is enabled
+        if (is_paginated) {
+            // Skip the appropriate number of documents based on the page number
+            const skip = (page - 1) * rows_per_page;
 
-        if (users.length === 0) {
-            return res.status(404).json({ message: 'No users found matching the search criteria.' });
+            // Fetch paginated results
+            const users = await User.find(searchQuery)
+                .skip(skip)
+                .limit(Number(rows_per_page));
+
+            // Get the total count of matching records (without pagination)
+            const total = await User.countDocuments(searchQuery);
+
+            return res.json({
+                page,
+                rows_per_page,
+                total,
+                users
+            });
+        } else {
+            // If pagination is not requested, return all matching users
+            const users = await User.find(searchQuery);
+            return res.json({
+                page: 1,
+                rows_per_page: users.length,
+                total : users.length,
+                users
+            });
         }
-
-        // Return the matching users
-        res.status(200).json(users);
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        return res.status(500).json({ message: err.message });
     }
 });
+
 
 // DELETE route to delete a user by user_id
 userRouter.delete('/users/:user_id', async (req, res) => {

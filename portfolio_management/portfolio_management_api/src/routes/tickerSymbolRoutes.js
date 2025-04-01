@@ -6,31 +6,56 @@ const tickerSymbolRouter = express.Router();
 
 // GET route to search ticker details by string in any of the fields (isin, cusip, ticker_symbol, company_name)
 tickerSymbolRouter.get('/tickers/search', async (req, res) => {
+    const { search, is_paginated = false, page = 1, rows_per_page = 10 } = req.query; // Get the search query from the request URL
+
+    if (!search) {
+        return res.status(400).json({ message: 'Search query is required' });
+    }
+
     try {
-        const { search } = req.query; // Get the search query from the request URL
-
-        if (!search) {
-            return res.status(400).json({ message: 'Search query is required' });
-        }
-
-        // Perform the search with the OR condition and exclude records where is_deleted is true
-        const tickerDetails = await TickerSymbol.find({
-            $and: [
-                {
-                    $or: [
-                        { isin: { $regex: search, $options: 'i' } },
-                        { cusip: { $regex: search, $options: 'i' } },
-                        { ticker_symbol: { $regex: search, $options: 'i' } },
-                        { company_name: { $regex: search, $options: 'i' } },
-                    ],
-                },
-                { is_deleted: { $ne: true } }, // Exclude records where is_deleted is true
+        // Construct the search query
+        const searchQuery = {
+            $or: [
+                { isin: { $regex: search, $options: 'i' } },
+                { cusip: { $regex: search, $options: 'i' } },
+                { ticker_symbol: { $regex: search, $options: 'i' } },
+                { company_name: { $regex: search, $options: 'i' } }
             ],
-        });
+            isDeleted: { $ne: true }
+        };
 
-        res.status(200).json(tickerDetails);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
+        // If pagination is enabled
+        if (is_paginated) {
+            // Skip the appropriate number of documents based on the page number
+            const skip = (page - 1) * rows_per_page;
+
+            // Fetch paginated results
+            const tickers = await TickerSymbol.find(searchQuery)
+                .skip(skip)
+                .limit(Number(rows_per_page));
+
+            // Get the total count of matching records (without pagination)
+            const total = await TickerSymbol.countDocuments(searchQuery);
+
+            return res.json({
+                page,
+                rows_per_page,
+                total,
+                tickers
+            });
+        } else {
+            // If pagination is not requested, return all matching tickers
+            const tickers = await TickerSymbol.find(searchQuery);
+            return res.json({
+                page: 1,
+                rows_per_page: tickers.length,
+                total: tickers.length,
+                tickers
+            });
+        }
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: err.message });
     }
 });
 
