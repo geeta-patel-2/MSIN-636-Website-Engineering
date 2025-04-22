@@ -20,3 +20,9 @@ API Endpoints:
 - Nodemon (for auto-restarting the server)
 - Morgan (for logging HTTP requests)
 - dotenv (for managing environment variables)
+
+
+## Updates:
+- Deleted app.js as it was redundant (Meaning not used anywhere). 
+- movieRoutes.js : Grouped routes with same URL and different HTTP Methods. 
+- movieController.js : Changed properties key within movies object adjusted condition check accordingly and added exception handling and input value validations.

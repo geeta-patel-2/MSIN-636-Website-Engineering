@@ -1,69 +1,98 @@
-
 /**
  * Mock data for movies
- *
- * */
+ */
 let movies = [
-    { id: 1, title: 'Love Aaj Kal', rating: 8.8 },
-    { id: 2, title: 'Me Hoon Na', rating: 7.8 },
+    { movie_id: 1, movie_name: 'Love Aaj Kal', imdb_rating: 8.8 },
+    { movie_id: 2, movie_name: 'Me Hoon Na', imdb_rating: 7.8 },
 ];
 
+/**
+ * Input validation helper
+ */
+const isValidMovie = ({ movie_name, imdb_rating }) => {
+    return !(typeof movie_name !== 'string' ||
+        movie_name.trim() === '' ||
+        typeof imdb_rating !== 'number' ||
+        imdb_rating < 0 ||
+        imdb_rating > 10);
+};
 
 /**
- * Method for getting all movie reviews
- * */
+ * Get all movies
+ */
 export const getMovies = (req, res) => {
-    // Return the movies array as JSON response with status 200
-    res.status(200).json(movies);
+    try {
+        res.status(200).json(movies);
+    } catch (err) {
+        res.status(500).send('Server error while fetching movies');
+    }
 };
 
 /**
- * Method for getting a single movie review by ID
- * */
+ * Get a single movie by ID
+ */
 export const getMovieById = (req, res) => {
-    const movie = movies.find((m) => m.id === parseInt(req.params.id));
-    if (!movie) return res.status(404).send('Movie not found');
-    res.status(200).json(movie);
+    try {
+        const movie = movies.find(m => m.movie_id === parseInt(req.params.id));
+        if (!movie) return res.status(404).send('Movie not found');
+        res.status(200).json(movie);
+    } catch (err) {
+        res.status(500).send('Server error while fetching the movie');
+    }
 };
 
 /**
- * Method for adding a new movie review
- * */
+ * Add a new movie
+ */
 export const createMovie = (req, res) => {
-    const { title, rating } = req.body;
-    if (!title || !rating) {
-        return res.status(400).send('Title and rating are required');
+    try {
+        const { movie_name, imdb_rating } = req.body;
+
+        if (!isValidMovie({ movie_name, imdb_rating })) {
+            return res.status(400).send('Invalid input. movie_name must be a non-empty string and imdb_rating must be a number between 0 and 10.');
+        }
+
+        const maxId = movies.length ? Math.max(...movies.map(m => m.movie_id)) : 0;
+        const newMovie = { movie_id: maxId + 1, movie_name, imdb_rating };
+        movies.push(newMovie);
+
+        res.status(201).json(newMovie);
+    } catch (err) {
+        res.status(500).send('Server error while adding the movie');
     }
-
-    const maxId = Math.max(...movies.map(obj => obj.id));
-    const newMovie = { id: maxId + 1, title, rating };
-    movies.push(newMovie);
-
-    res.status(201).json(newMovie);
 };
 
-
 /**
- * Method for updating a movie review's rating
- * */
+ * Update a movie's IMDb rating
+ */
 export const updateMovie = (req, res) => {
-    const movie = movies.find((m) => m.id === parseInt(req.params.id));
-    if (!movie) {
-        return res.status(404).send('Movie not found');
+    try {
+        const movie = movies.find(m => m.movie_id === parseInt(req.params.id));
+        if (!movie) return res.status(404).send('Movie not found');
+
+        const { imdb_rating } = req.body;
+        if (typeof imdb_rating !== 'number' || imdb_rating < 0 || imdb_rating > 10) {
+            return res.status(400).send('Invalid imdb_rating. It must be a number between 0 and 10.');
+        }
+
+        movie.imdb_rating = imdb_rating;
+        res.status(200).json(movie);
+    } catch (err) {
+        res.status(500).send('Server error while updating the movie');
     }
-    movie.rating = req.body.rating;
-    res.status(200).json(movie);
 };
 
-
 /**
- * Method for deleting a movie review
- * */
+ * Delete a movie
+ */
 export const deleteMovie = (req, res) => {
-    const movieIndex = movies.findIndex((m) => m.id === parseInt(req.params.id));
-    if (movieIndex === -1){
-        return res.status(404).send('Movie not found');
+    try {
+        const index = movies.findIndex(m => m.movie_id === parseInt(req.params.id));
+        if (index === -1) return res.status(404).send('Movie not found');
+
+        movies.splice(index, 1);
+        res.status(204).send();
+    } catch (err) {
+        res.status(500).send('Server error while deleting the movie');
     }
-    movies.splice(movieIndex, 1);
-    res.status(204).send();
 };
