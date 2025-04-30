@@ -17,7 +17,11 @@ const app = express();
 app.use(express.json());
 
 // MongoDB connection
-mongoose.connect(process.env.MONGODB_URI)
+mongoose.connect(process.env.MONGODB_URI, {
+    dbName: "test",
+    appName: "Movie-Management",
+    //Put name of your application
+})
     .then(() => console.log('MongoDB connected'))
     .catch(err => console.log('MongoDB connection error: ', err));
 
