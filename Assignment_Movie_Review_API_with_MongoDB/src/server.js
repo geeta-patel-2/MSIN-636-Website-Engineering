@@ -1,8 +1,13 @@
+import express from "express";
+import mongoose from "mongoose";
+import dotenv from 'dotenv';
+import reviewRoutes from "./routes/reviewRoutes.js";
+
 // server.js
-const express = require('express');
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-const reviewRoutes = require('./routes/reviewRoutes');
+// const express = require('express');
+// const mongoose = require('mongoose');
+// const dotenv = require('dotenv');
+// const reviewRoutes = require('./routes/reviewRoutes');
 
 // Load environment variables
 dotenv.config();
@@ -25,5 +30,3 @@ app.use('/api/reviews', reviewRoutes);
 // Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
-module.exports = app;

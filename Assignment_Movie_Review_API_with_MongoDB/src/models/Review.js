@@ -1,5 +1,5 @@
 // models/Review.js
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const reviewSchema = new mongoose.Schema({
     title: { type: String, required: true },
@@ -9,4 +9,4 @@ const reviewSchema = new mongoose.Schema({
     movie: { type: String, required: true },
 }, { timestamps: true });
 
-module.exports = mongoose.model('Review', reviewSchema);
+export default mongoose.model('Review', reviewSchema);

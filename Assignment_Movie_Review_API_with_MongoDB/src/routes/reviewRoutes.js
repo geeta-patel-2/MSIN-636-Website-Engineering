@@ -1,11 +1,13 @@
 // routes/reviewRoutes.js
-const express = require('express');
-const Review = require('../models/Review');
+import express from 'express';
 
-const router = express.Router();
+// const express = require('express');
+// const Review = require('../models/Review');
+
+const reviewRoutes = express.Router();
 
 // GET all reviews
-router.get('/', async (req, res) => {
+reviewRoutes.get('/', async (req, res) => {
     try {
         const reviews = await Review.find();
         res.status(200).json(reviews);
@@ -15,7 +17,7 @@ router.get('/', async (req, res) => {
 });
 
 // POST a new review
-router.post('/', async (req, res) => {
+reviewRoutes.post('/', async (req, res) => {
     try {
         const { title, reviewer, rating, review, movie } = req.body;
 
@@ -35,7 +37,7 @@ router.post('/', async (req, res) => {
 });
 
 // PUT (update) a review
-router.put('/:id', async (req, res) => {
+reviewRoutes.put('/:id', async (req, res) => {
     try {
         const { title, reviewer, rating, review, movie } = req.body;
         const updatedReview = await Review.findByIdAndUpdate(
@@ -50,7 +52,7 @@ router.put('/:id', async (req, res) => {
 });
 
 // DELETE a review
-router.delete('/:id', async (req, res) => {
+reviewRoutes.delete('/:id', async (req, res) => {
     try {
         await Review.findByIdAndDelete(req.params.id);
         res.status(200).json({ message: 'Review deleted' });
@@ -59,4 +61,4 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
-module.exports = router;
+export default reviewRoutes;
