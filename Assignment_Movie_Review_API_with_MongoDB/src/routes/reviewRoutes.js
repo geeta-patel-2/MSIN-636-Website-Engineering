@@ -1,5 +1,6 @@
 // routes/reviewRoutes.js
 import express from 'express';
+import Review from "../models/Review.js";
 
 // const express = require('express');
 // const Review = require('../models/Review');
