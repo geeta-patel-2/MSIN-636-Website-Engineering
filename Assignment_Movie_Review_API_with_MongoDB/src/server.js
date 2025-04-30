@@ -23,6 +23,7 @@ mongoose.connect(process.env.MONGODB_URI)
 
 // Use routes
 app.use('/api/reviews', reviewRoutes);
+app.get("/", (req, res) => res.send("Express on Vercel"));
 
 // Start server
 const PORT = process.env.PORT || 5000;
