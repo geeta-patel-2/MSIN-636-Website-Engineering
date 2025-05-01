@@ -1,5 +1,6 @@
 // models/User.js
 import mongoose from 'mongoose';
+import bcrypt from "bcrypt";
 
 const userSchema = new mongoose.Schema({
     user_id: {
@@ -26,10 +27,29 @@ const userSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,  // Default is CURRENT_TIMESTAMP in SQL
         required: true,  // Corresponds to NOT NULL constraint
-    }
+    },
+    password: { type: String, required: true, select: false },
 }, {
     timestamps: false  // We manually handle `joining_date`, so no need for default timestamps
 });
+
+// Hash password before saving
+userSchema.pre('save', async function (next) {
+    if (!this.isModified('password')) return next();
+
+    try {
+        const salt = await bcrypt.genSalt(10);
+        this.password = await bcrypt.hash(this.password, salt);
+        next();
+    } catch (err) {
+        next(err);
+    }
+});
+
+// Compare password method
+userSchema.methods.comparePassword = function (candidatePassword) {
+    return bcrypt.compare(candidatePassword, this.password);
+};
 
 // Create the model from the schema
 const User = mongoose.model('Users', userSchema);

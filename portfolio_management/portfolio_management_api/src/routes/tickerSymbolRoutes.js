@@ -1,8 +1,12 @@
 // routes/tickerRoutes.js
 import express from 'express';
 import TickerSymbol from '../models/tickerSymbol.js';
+import {JwtUtils} from "../utilities/jwtUtils.js";
 
 const tickerSymbolRouter = express.Router();
+
+// Apply middleware to all routes
+tickerSymbolRouter.use(JwtUtils.verifyToken);
 
 // GET route to search ticker details by string in any of the fields (isin, cusip, ticker_symbol, company_name)
 tickerSymbolRouter.get('/tickers/search', async (req, res) => {

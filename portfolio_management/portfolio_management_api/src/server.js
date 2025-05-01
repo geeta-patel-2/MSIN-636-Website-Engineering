@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import userRoutes from "./routes/userRoutes.js";
 import tickerSymbolRoutes from "./routes/tickerSymbolRoutes.js";
+import loginRouter from "./routes/loginRoutes.js";
 
 dotenv.config();
 
@@ -18,6 +19,8 @@ mongoose.connect(process.env.MONGODB_URI)
     .catch((err) => console.log('Error connecting to MongoDB:', err));
 
 // Routes
+
+app.use('/api', loginRouter);
 app.use('/api', userRoutes); // Prefix user routes with /api
 app.use('/api', tickerSymbolRoutes); // Prefix ticker routes with /api
 

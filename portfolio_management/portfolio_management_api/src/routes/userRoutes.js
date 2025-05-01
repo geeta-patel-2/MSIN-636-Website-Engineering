@@ -1,8 +1,12 @@
 // routes/userRoutes.js
 import express from 'express';
 import User from '../models/User.js';
+import {JwtUtils} from "../utilities/jwtUtils.js";
 
 const userRouter = express.Router();
+
+// Apply middleware to all routes
+userRouter.use(JwtUtils.verifyToken);
 
 // POST route to create a new user
 userRouter.post('/users', async (req, res) => {
