@@ -58,6 +58,6 @@ userSchema.methods.comparePassword = function (candidatePassword) {
 };
 
 // Create the model from the schema
-const User = mongoose.model('Users', userSchema);
+const User = mongoose.models.Users || mongoose.model('Users', userSchema);
 
 export default User;

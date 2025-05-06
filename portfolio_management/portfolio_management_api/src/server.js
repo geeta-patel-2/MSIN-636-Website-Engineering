@@ -5,6 +5,7 @@ import userRoutes from "./routes/userRoutes.js";
 import tickerSymbolRoutes from "./routes/tickerSymbolRoutes.js";
 import loginRouter from "./routes/loginRoutes.js";
 import connectDB from "./config/db.js";
+import accountDashboardRoutes from "./routes/AccountDashboard.js";
 
 dotenv.config();
 
@@ -21,6 +22,7 @@ await connectDB();
 app.use('/api', loginRouter);
 app.use('/api', userRoutes); // Prefix user routes with /api
 app.use('/api', tickerSymbolRoutes); // Prefix ticker routes with /api
+app.use('/api', accountDashboardRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 5000;
