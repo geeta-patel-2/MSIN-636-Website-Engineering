@@ -18,18 +18,19 @@ loginRouter.post('/login', async (req, res) => {
 
         user = await User.findOne({ email_id });
 
+        // Generate token, send response, etc.
         JwtUtils.getNewToken(user, (err, token) => {
-            console.log('Test ', token);
             if (err) {
+                // error Response
                 return res.status(500).json({ message: 'Something went wrong while generating token.' });
             } else {
+                // Success response
                 return res.json({ message: 'Login successful',token });
             }
         });
 
-        // Generate token, send response, etc.
-        //res.json({ message: 'Login successful' });
     } catch (err) {
+        // Logging error and sending error response.
         console.log(err);
         res.status(500).json({ message: err.message });
     }
@@ -40,8 +41,6 @@ loginRouter.post('/register', async (req, res) => {
     try {
         const { first_name, last_name, email_id, password } = req.body;
         const highestUserIdUser = await User.findOne().sort({ user_id: -1 });
-        console.log(highestUserIdUser);
-        console.log(highestUserIdUser.user_id+1);
 
         const newUser = new User({
             user_id: highestUserIdUser.user_id + 1,

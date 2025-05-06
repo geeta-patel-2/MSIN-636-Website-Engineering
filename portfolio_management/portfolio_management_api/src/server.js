@@ -1,10 +1,10 @@
 // index.js
 import express from 'express';
-import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import userRoutes from "./routes/userRoutes.js";
 import tickerSymbolRoutes from "./routes/tickerSymbolRoutes.js";
 import loginRouter from "./routes/loginRoutes.js";
+import connectDB from "./config/db.js";
 
 dotenv.config();
 
@@ -14,9 +14,7 @@ const app = express();
 app.use(express.json());
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI)
-    .then(() => console.log('MongoDB connected'))
-    .catch((err) => console.log('Error connecting to MongoDB:', err));
+await connectDB();
 
 // Routes
 

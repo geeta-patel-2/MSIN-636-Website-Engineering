@@ -29,6 +29,12 @@ const userSchema = new mongoose.Schema({
         required: true,  // Corresponds to NOT NULL constraint
     },
     password: { type: String, required: true, select: false },
+    user_type: {
+        type: String,
+        enum: ['Strategic Advisor', 'Individual Trader'],
+        required: true,
+        default: 'Individual Trader'
+    }
 }, {
     timestamps: false  // We manually handle `joining_date`, so no need for default timestamps
 });
