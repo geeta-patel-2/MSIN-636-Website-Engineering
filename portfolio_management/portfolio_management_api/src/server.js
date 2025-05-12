@@ -6,6 +6,8 @@ import tickerSymbolRoutes from "./routes/tickerSymbolRoutes.js";
 import loginRouter from "./routes/loginRoutes.js";
 import connectDB from "./config/db.js";
 import accountDashboardRoutes from "./routes/AccountDashboard.js";
+import proposedOrderRoutes from "./routes/ProposedOrderRoutes.js";
+import openOrderRoutes from "./routes/OpenOrderRoutes.js";
 
 dotenv.config();
 
@@ -23,6 +25,8 @@ app.use('/api', loginRouter);
 app.use('/api', userRoutes); // Prefix user routes with /api
 app.use('/api', tickerSymbolRoutes); // Prefix ticker routes with /api
 app.use('/api', accountDashboardRoutes);
+app.use('/api', proposedOrderRoutes);
+app.use('/api/open-orders', openOrderRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 5000;

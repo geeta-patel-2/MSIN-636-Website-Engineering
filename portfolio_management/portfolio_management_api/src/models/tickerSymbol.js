@@ -53,6 +53,6 @@ const tickerDetailSchema = new mongoose.Schema({
 });
 
 // Create a model for the 'ticker_details' collection using the schema
-const TickerSymbol = mongoose.model('ticker_symbols', tickerDetailSchema);
+const TickerSymbol =  mongoose.models.ticker_symbols || mongoose.model('ticker_symbols', tickerDetailSchema);
 
 export default TickerSymbol;

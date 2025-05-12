@@ -11,6 +11,11 @@ const userAssociationSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Users', // reference to Users collection
         required: true
+    },
+    check_box: {
+        type: String,
+        enum: ['checked', 'not checked'],
+        default: 'not checked'
     }
 });
 
@@ -88,6 +93,6 @@ userAssociationSchema.pre('findOneAndUpdate', async function (next) {
     }
 });
 
-const UserAssociation = mongoose.model('UserAssociations', userAssociationSchema);
+const UserAssociation = mongoose.models.UserAssociations || mongoose.model('UserAssociations', userAssociationSchema);
 
 export default UserAssociation;
