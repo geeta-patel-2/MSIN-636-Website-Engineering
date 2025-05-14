@@ -30,6 +30,16 @@ app.use('/api/open-orders', openOrderRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
+// app.listen(PORT, () => {
+//     console.log(`Server running on port ${PORT}`);
+// });
+
+
+// Main handler for serverless
+export default async function handler(req, res) {
+    const parsedUrl = parse(req.url, true);
+    req.query = parsedUrl.query;
+    req.path = parsedUrl.pathname;
+
+    return app(req, res);
+}
