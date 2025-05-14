@@ -21,6 +21,8 @@ await connectDB();
 
 // Routes
 
+app.get("/", (req, res) => res.send("Poerfolio Management Express on Vercel"));
+
 app.use('/api', loginRouter);
 app.use('/api', userRoutes); // Prefix user routes with /api
 app.use('/api', tickerSymbolRoutes); // Prefix ticker routes with /api
