@@ -5,7 +5,7 @@ import ProposedOrderSessionAccounts from '../models/ProposedOrderSessionAccounts
 import ProposedOrderSessionAccountHoldings from '../models/ProposedOrderSessionAccountHoldings.js';
 import User from '../models/user.js';
 import UserAssociation from '../models/UserAssociation.js';
-import TickerSymbol from '../models/TickerSymbol.js';
+import TickerSymbol from '../models/tickerSymbol.js';
 import AccountHoldings from '../models/AccountHoldings.js';
 import UserAccount from "../models/UserAccounts.js";
 import {JwtUtils} from "../utilities/jwtUtils.js";
