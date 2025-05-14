@@ -3,7 +3,7 @@ import express from 'express';
 import ProposedOrderSession from '../models/ProposedOrderSession.js';
 import ProposedOrderSessionAccounts from '../models/ProposedOrderSessionAccounts.js';
 import ProposedOrderSessionAccountHoldings from '../models/ProposedOrderSessionAccountHoldings.js';
-import User from '../models/User.js';
+import User from '../models/user.js';
 import UserAssociation from '../models/UserAssociation.js';
 import TickerSymbol from '../models/TickerSymbol.js';
 import AccountHoldings from '../models/AccountHoldings.js';

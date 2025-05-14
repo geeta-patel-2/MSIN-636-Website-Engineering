@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import User from './User.js'; // Adjust the path to your User model
+import User from './user.js'; // Adjust the path to your User model
 
 const userAccountSchema = new mongoose.Schema({
     individual_id: {
