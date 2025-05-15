@@ -70,7 +70,7 @@ accountDashboardRoutes.get('/account_dashboard/:user_id', async (req, res) => {
 // ✅ Mark a single account as checked
 accountDashboardRoutes.post('/mark_account_checked', async (req, res) => {
     try {
-        const userId = req.user.id; // Logged-in user ID
+        const userId = req.user.user.id; // Logged-in user ID
         const { account_id } = req.body;
 
         // Validate account_id
@@ -136,7 +136,7 @@ accountDashboardRoutes.post('/mark_account_checked', async (req, res) => {
 // ✅ Mark ALL accounts belonging to the logged-in user as checked
 accountDashboardRoutes.post('/mark_all_accounts_checked', async (req, res) => {
     try {
-        const userId = req.user.id; // Logged-in user ID
+        const userId = req.user.userid; // Logged-in user ID
 
         // Mark all associations for this user as checked
         const result = await UserAssociation.updateMany(
@@ -171,7 +171,7 @@ accountDashboardRoutes.post('/mark_all_accounts_checked', async (req, res) => {
 // ✅ Fetch all accounts marked as checked by the logged-in user
 accountDashboardRoutes.get('/checked_accounts', async (req, res) => {
     try {
-        const userId = req.user.id; // Logged-in user ID
+        const userId = req.user.userid; // Logged-in user ID
 
         // Find all UserAssociations where individual_id is this user and checked
         const associations = await UserAssociation.find({

@@ -14,7 +14,7 @@ openOrderRoutes.post('/', async (req, res) => {
         const { account_id, holding_id, order_quantity, order_market_value } = req.body;
 
         const order = new OpenOrder({
-            user_id: req.user.id,
+            user_id: req.user.user.id,
             account_id,
             holding_id,
             order_quantity,
@@ -32,7 +32,7 @@ openOrderRoutes.post('/', async (req, res) => {
 // Read All Orders for User
 openOrderRoutes.get('/', async (req, res) => {
     try {
-        const orders = await OpenOrder.find({ user_id: req.user.id });
+        const orders = await OpenOrder.find({ user_id: req.user.user.id });
         res.status(200).json({ status: true, message: "Orders fetched", data: orders });
     } catch (error) {
         res.status(500).json({ status: false, message: "Error fetching orders", data: error.message });
@@ -43,7 +43,7 @@ openOrderRoutes.get('/', async (req, res) => {
 openOrderRoutes.put('/:id', async (req, res) => {
     try {
         const updated = await OpenOrder.findOneAndUpdate(
-            { _id: req.params.id, user_id: req.user.id },
+            { _id: req.params.id, user_id: req.user.user.id },
             req.body,
             { new: true }
         );
@@ -59,7 +59,7 @@ openOrderRoutes.put('/:id', async (req, res) => {
 // Delete Order
 openOrderRoutes.delete('/:id', async (req, res) => {
     try {
-        const deleted = await OpenOrder.findOneAndDelete({ _id: req.params.id, user_id: req.user.id });
+        const deleted = await OpenOrder.findOneAndDelete({ _id: req.params.id, user_id: req.user.user._id });
 
         if (!deleted) return res.status(404).json({ status: false, message: "Order not found", data: null });
 
